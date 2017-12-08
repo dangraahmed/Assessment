@@ -1,12 +1,17 @@
 // libs
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Rx';
+
+import * as fromStore from '../../modules/ngrx/index';
 
 // app
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { IAppState, getNames } from '../../modules/ngrx/index';
-import { NameList } from '../../modules/sample/index';
+
+import { Cart } from '../../modules/cart/actions/index';
+import { ICartState, IProduct } from '../../modules/cart/index';
+import { debug } from 'util';
 
 @Component({
   moduleId: module.id,
@@ -14,35 +19,26 @@ import { NameList } from '../../modules/sample/index';
   templateUrl: 'home.component.html',
   styleUrls: ['home.component.css']
 })
-export class HomeComponent implements OnInit {
-  public names$: Observable<any>;
-  public newName: string;
+export class HomeComponent implements OnInit, OnDestroy {
+  public listOfProduct: any;
+  private _ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
+  constructor(private store: Store<fromStore.IAppState>, public routerext: RouterExtensions) { }
 
   ngOnInit() {
-    this.names$ = this.store.let(getNames);
-    this.newName = '';
+    this.store.select(fromStore.getProduct)
+      .takeUntil(this._ngUnsubscribe)
+      .subscribe(p => {
+        this.store.dispatch(new Cart.CartAction());
+        if (p !== undefined) {
+          this.listOfProduct = p;
+        }
+      });
   }
 
-  /*
-   * @param newname  any text as input.
-   * @returns return false to prevent default form submit behavior to refresh the page.
-   */
-  addName(): boolean {
-    this.store.dispatch(new NameList.AddAction(this.newName));
-    this.newName = '';
-    return false;
+  ngOnDestroy() {
+    this._ngUnsubscribe.next();
+    this._ngUnsubscribe.complete();
   }
 
-  readAbout() {
-    // Try this in the {N} app
-    // {N} can use these animation options
-    this.routerext.navigate(['/about'], {
-      transition: {
-        duration: 1000,
-        name: 'slideTop',
-      }
-    });
-  }
 }

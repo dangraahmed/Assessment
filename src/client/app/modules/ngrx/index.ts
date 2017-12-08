@@ -39,6 +39,7 @@ import { combineReducers } from '@ngrx/store';
  */
 import * as fromMultilingual from '../i18n/index';
 import * as fromSample from '../sample/index';
+import * as fromCart from '../cart/index';
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -47,6 +48,7 @@ import * as fromSample from '../sample/index';
 export interface IAppState {
   i18n: fromMultilingual.IMultilingualState;
   sample: fromSample.ISampleState;
+  cart: fromCart.ICartState;
 }
 
 /**
@@ -58,7 +60,8 @@ export interface IAppState {
  */
 const reducers = {
   i18n: fromMultilingual.reducer,
-  sample: fromSample.reducer
+  sample: fromSample.reducer,
+  cart: fromCart.cartReducer,
 };
 
 // ensure state is frozen as extra level of security when developing
@@ -80,6 +83,10 @@ export function getMultilingualState(state$: Observable<IAppState>): Observable<
 }
 export function getNameListState(state$: Observable<IAppState>): Observable<fromSample.ISampleState> {
   return state$.select(s => s.sample);
+}
+
+export function getProduct(state: IAppState) {
+  return state.cart;
 }
 
 export const getLang: any = compose(fromMultilingual.getLang, getMultilingualState);
