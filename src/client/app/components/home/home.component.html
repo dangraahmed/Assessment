@@ -1,15 +1,32 @@
-<div *ngIf="listOfProduct else loadingData">
-  <table class="col-md-12 table-striped table-condensed table-hover">
-    <tr>
-      <th>Name</th>
-      <th>Price</th>
-    </tr>
-    <tr *ngFor="let product of listOfProduct.products">
-      <td> {{product.name}} </td>
-      <td> {{product.price}} </td>
-    </tr>
-  </table>
-</div>
+<table width=100%>
+  <tr>
+    <sd-my-cart></sd-my-cart>
+  </tr>
+  <tr>
+    <td>
+      <div *ngIf="listOfProduct else loadingData">
+        <table border="1">
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>&nbsp;</th>
+          </tr>
+          <tr *ngFor="let product of listOfProduct.products">
+            <td> {{product.name}} </td>
+            <td> {{product.price}} </td>
+            <td> {{product.description}} </td>
+            <td>
+              <img src="#" height="100" width="100"> </td>
+            <td>
+              <button (click)="addToCart(product);">Add To Cart</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </td>
+  </tr>
+</table>
 <ng-template #loadingData>
   <div>
     data loading
