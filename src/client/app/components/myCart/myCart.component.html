@@ -1,0 +1,17 @@
+<div *ngIf="listOfProduct else loadingData">
+  <table border="1">
+    <tr>
+      <th colspan="3">My Cart</th>
+    </tr>
+    <tr *ngFor="let prod of listOfProduct.selectedProduct">
+      <td>Name: {{prod.product.name}} </td>
+      <td>Quantity: {{prod.quantity}} </td>
+      <td><button (click)="removeFromCart(prod);">Remove To Cart</button> </td>
+    </tr>
+  </table>
+</div>
+<ng-template #loadingData>
+  <div>
+    data loading
+  </div>
+</ng-template>

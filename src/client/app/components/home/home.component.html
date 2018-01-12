@@ -1,23 +1,34 @@
-<h2>
-  {{ 'LOVE_TECH' | translate }} <div class="smile"></div>
-</h2>
-
-<p>
-  {{'ABOUT_REWARD' | translate}}
-</p>
-<p>
-  {{'ABOUT_ADD' | translate}}
-</p>
-
-<form (submit)="addName()">
-  <input [(ngModel)]="newName" name="newName" [placeholder]="'INPUT_HINT' | translate">
-  <button type="submit">{{'ADD_BTN_TEXT' | translate}}</button>
-</form>
-
-<ul>
-  <li *ngFor="let name of (names$ | async)">{{name}}</li>
-</ul>
-
-<p>
-  <a class="link" (click)="readAbout()">About - RouterExtensions example</a>
-</p>
+<table width=100%>
+  <tr>
+    <sd-my-cart></sd-my-cart>
+  </tr>
+  <tr>
+    <td>
+      <div *ngIf="listOfProduct else loadingData">
+        <table border="1">
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>&nbsp;</th>
+          </tr>
+          <tr *ngFor="let product of listOfProduct.products">
+            <td> {{product.name}} </td>
+            <td> {{product.price}} </td>
+            <td> {{product.description}} </td>
+            <td>
+              <img src="#" height="100" width="100"> </td>
+            <td>
+              <button (click)="addToCart(product);">Add To Cart</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </td>
+  </tr>
+</table>
+<ng-template #loadingData>
+  <div>
+    data loading
+  </div>
+</ng-template>

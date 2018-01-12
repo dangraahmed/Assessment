@@ -10,16 +10,16 @@ import * as fromStore from '../../modules/ngrx/index';
 import { RouterExtensions, Config } from '../../modules/core/index';
 
 import { Cart } from '../../modules/cart/actions/index';
-import { ICartState, IProduct } from '../../modules/cart/index';
+import { ICartState, IProduct, ICartProduct } from '../../modules/cart/index';
 import { debug } from 'util';
 
 @Component({
   moduleId: module.id,
-  selector: 'sd-home',
-  templateUrl: 'home.component.html',
-  styleUrls: ['home.component.css']
+  selector: 'sd-my-cart',
+  templateUrl: 'myCart.component.html',
+  styleUrls: ['myCart.component.css']
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class MyCartComponent implements OnInit, OnDestroy {
   public listOfProduct: any;
   private _ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this._ngUnsubscribe.complete();
   }
 
-  addToCart(product: IProduct) {
-    this.store.dispatch(new Cart.AddToCartAction(product));
+  removeFromCart(product: ICartProduct) {
+    this.store.dispatch(new Cart.RemoveFromCartAction(product));
   }
 }
